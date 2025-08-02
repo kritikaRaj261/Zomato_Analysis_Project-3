@@ -143,4 +143,4 @@ INSERT INTO rider (rider_id, rider_name, sign_up) VALUES
 (33, 'Raj Kumar', '2024-08-01'),
 (34, 'Sanjay Kumar', '2024-08-05');
 ```
-
+**Note** Rest table I have imported using Method-2
