@@ -144,3 +144,45 @@ INSERT INTO rider (rider_id, rider_name, sign_up) VALUES
 (34, 'Sanjay Kumar', '2024-08-05');
 ```
 **Note** Rest table I have imported using Method-2
+
+## Checking for NULL Values in Columns
+```sql
+- CHHeck Null value in the table
+select * from customer
+where customer_id is NULL
+OR customer_name IS NULL
+OR reg_date IS NULL
+
+-- Check NULL VALUES IN RESTAURANT TABLE
+SELECT * FROM restaurant
+WHERE restaurant_id IS NULL
+OR restaurant_name IS NULL
+OR city IS NULL
+OR opening_hours IS NULL
+
+-- CHECK NULL IN  Delivery TABLE
+SELECT * FROM Delivery
+WHERE delivery_id IS NULL
+OR order_id IS NULL
+OR delivery_status IS NULL
+OR delivery_time IS NULL
+OR rider_id IS NULL
+ 
+ -- CHECK NULL IN RIDER TABLE
+ select * from rider
+ WHERE rider_id IS NULL
+ OR rider_name IS NULL
+  
+select * from orders
+WHERE order_id IS NULL
+OR customer_id IS NULL
+OR restaurant_id IS NULL
+OR order_item IS NULL
+OR order_date IS NULL
+OR order_time IS NULL
+OR order_status IS NULL
+OR total_amount IS NULL
+```
+
+
+
