@@ -278,6 +278,171 @@ FROM CT_TABLE
 WHERE rn = 1;
 ```
 
+ **Task 3 Question: Find the average order value per customer who has placed more than 750 orders.**
+ ```sql
+ SELECT AVG(total_amount) as oder_value,
+ count(order_id) as countorder,
+ c.customer_id,customer_name
+ FROM CUSTOMER C
+ INNER JOIN ORDERS O
+ ON C.CUSTOMER_ID=O.CUSTOMER_ID
+ group by customer_id,customer_name
+ having COUNT(Order_id)>750
+ ```
+
+ **Task 4. High-Value Customers
+Question: List the customers who have spent more than 1000 in total on food orders.
+Return customer_name and customer_id!**
+```sql
+select c.customer_id,customer_name ,
+sum(total_amount) as total_order
+from customer c
+inner join orders o
+on c.customer_id=o.customer_id
+group by 1,2
+having sum(total_amount)> 1000
+```
+
+**Task 5. Orders Without Delivery
+Question: Write a query to find orders that were placed but not delivered.
+Return each restaurant name, city, and number of not delivered orders.**
+```sql
+SELECT 
+    r.restaurant_name,
+    r.city,
+    COUNT(o.order_id) AS not_delivered_orders
+FROM 
+    orders o
+INNER JOIN 
+    restaurant r ON o.restaurant_id = r.restaurant_id
+LEFT JOIN 
+    delivery d ON o.order_id = d.order_id
+WHERE 
+    d.delivery_id IS NULL
+GROUP BY 
+    r.restaurant_name, r.city;
+
+-- Method-2
+SELECT 
+    r.restaurant_name,
+    r.city,
+    COUNT(o.order_id) AS not_delivered_orders
+FROM 
+    orders o
+INNER JOIN 
+    restaurant r ON o.restaurant_id = r.restaurant_id
+WHERE 
+    o.order_id NOT IN (SELECT order_id FROM delivery d)
+GROUP BY 
+    r.restaurant_name, r.city;
+```
+
+**Task6Restaurant Revenue Ranking:
+Rank restaurants by their total revenue from the last year, including their name, total revenue, and rank within their city.**
+```sql
+
+select 
+r.restaurant_name,
+sum(total_amount) as revenue,
+r.city,
+rank() over (partition by r.city order by sum(total_amount) desc) as rn
+ from orders o
+inner join restaurant r
+on o.restaurant_id=r.restaurant_id
+where o.order_date>= curdate()- interval-1 year
+group by 1,3
+```
+
+
+**Task 7:Most Popular Dish by City:
+Identify the most popular dish in each city based on the number of orders.**
+```sql
+with ct_rankdish as
+(
+select 
+r.city,
+o.order_item as dish,
+count(order_id) as number_of_orders,
+rank() over (partition by r.city order by count(order_id) desc) as rn
+from orders o
+inner join restaurant r
+on o.restaurant_id=r.restaurant_id
+group by 1,2
+)
+select * from ct_rankdish
+where rn=1
+```
+**Task 8: Customer Churn:
+Find customers who haven’t placed an order in 2028 but did in 2024.**
+```sql
+select distinct c.customer_name
+from customer c
+inner join orders o
+on c.customer_id=o.customer_id
+where year(order_date)='2024'
+and o.customer_id NOT IN (SELECT  distinct customer_id from orders where year(order_date)='2028')
+```
+
+**Task 9:Cancellation Rate Comparison:
+Calculate and compare the order cancellation rate for each restaurant between the current year and the previous year.**
+```sql
+WITH ct_cancellation_rate_2023 AS (
+    SELECT 
+        r.restaurant_id,
+        r.restaurant_name,
+        COUNT(o.order_id) AS total_orders,
+        COUNT(CASE WHEN d.delivery_id IS NULL THEN 1 END) AS Not_delivered
+    FROM orders o
+    INNER JOIN restaurant r ON o.restaurant_id = r.restaurant_id
+    LEFT JOIN delivery d ON o.order_id = d.order_id
+    WHERE YEAR(o.order_date) = 2023
+    GROUP BY r.restaurant_id, r.restaurant_name
+),
+
+ct_cancellation_rate_2024 AS (
+    SELECT 
+        r.restaurant_id,
+        r.restaurant_name,
+        COUNT(o.order_id) AS total_orders,
+        COUNT(CASE WHEN d.delivery_id IS NULL THEN 1 END) AS Not_delivered
+    FROM orders o
+    INNER JOIN restaurant r ON o.restaurant_id = r.restaurant_id
+    LEFT JOIN delivery d ON o.order_id = d.order_id
+    WHERE YEAR(o.order_date) = 2024
+    GROUP BY r.restaurant_id, r.restaurant_name
+),
+
+last_year_ratio AS (
+    SELECT 
+        restaurant_id,
+        restaurant_name,
+        ROUND(Not_delivered * 100.0 / NULLIF(total_orders, 0), 2) AS cancel_rate_2023
+    FROM ct_cancellation_rate_2023
+),
+
+current_year_ratio AS (
+    SELECT 
+        restaurant_id,
+        restaurant_name,
+        ROUND(Not_delivered * 100.0 / NULLIF(total_orders, 0), 2) AS cancel_rate_2024
+    FROM ct_cancellation_rate_2024
+)
+
+-- Final comparison
+SELECT 
+    c.restaurant_id AS rest_id,
+    c.restaurant_name,
+    l.cancel_rate_2023 AS lastyearRatio_ratio,
+    c.cancel_rate_2024 AS currentYearRatio_ratio,
+    ROUND(c.cancel_rate_2024 - l.cancel_rate_2023, 2) AS cancellation_rate_diff
+FROM 
+    last_year_ratio l
+INNER JOIN 
+    current_year_ratio c ON l.restaurant_id = c.restaurant_id
+ORDER BY 
+    rest_id;
+```
+
     
 
 
