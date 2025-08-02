@@ -185,7 +185,7 @@ OR total_amount IS NULL
 ```
 ## 4. Data Analysis & Findings
 **Task1.Write a query to find the top 5 most frequently ordered dishes by customer called "Anita Verma" in the last 1 year.**
-````sql
+```sql
 SELECT 
     o.order_item,
     COUNT(o.order_item) AS order_count
@@ -223,6 +223,61 @@ GROUP BY
     select * from CT_Rank
     where RN<=5;
 ```
+
+**Task 2. Question: Identify the time slots during which the most orders are placed, based on 2-hour intervals.**
+```sql
+
+--Method-1
+
+SELECT count(order_id),
+CASE 
+WHEN HOUR(ORDER_TIME) BETWEEN 0 AND 1 THEN  '0-2'
+WHEN HOUR(ORDER_TIME)  BETWEEN 2 AND 3 THEN '2-4'
+WHEN HOUR(ORDER_TIME)  BETWEEN 4 AND 5 THEN '4-6'
+WHEN HOUR(ORDER_TIME)  BETWEEN 6 AND 7 THEN '6-8'
+WHEN HOUR(ORDER_TIME)  BETWEEN 8 AND 9 THEN '8-10'
+WHEN HOUR(ORDER_TIME)  BETWEEN 10 AND 11 THEN '10-12'
+WHEN HOUR(ORDER_TIME)  BETWEEN 12 AND 13 THEN '12-14'
+WHEN HOUR(ORDER_TIME)  BETWEEN 14 AND 15 THEN '14-16'
+WHEN HOUR(ORDER_TIME)  BETWEEN 16 AND 17 THEN '16-18'
+WHEN HOUR(ORDER_TIME)  BETWEEN 18 AND 19 THEN '18-20'
+WHEN HOUR(ORDER_TIME)  BETWEEN 20 AND 21 THEN '20-22'
+WHEN HOUR(ORDER_TIME)  BETWEEN 22 AND 23 THEN '22-24'
+END AS 'Timeslot'
+ FROM ORDERS
+ group by Timeslot
+ order by count(order_id) desc
+ limit 1
+
+---Method-2--
+
+WITH CT_TABLE AS 
+(
+    SELECT 
+        CASE 
+            WHEN HOUR(order_time) BETWEEN 0 AND 1 THEN '0-2'
+            WHEN HOUR(order_time) BETWEEN 2 AND 3 THEN '2-4'
+            WHEN HOUR(order_time) BETWEEN 4 AND 5 THEN '4-6'
+            WHEN HOUR(order_time) BETWEEN 6 AND 7 THEN '6-8'
+            WHEN HOUR(order_time) BETWEEN 8 AND 9 THEN '8-10'
+            WHEN HOUR(order_time) BETWEEN 10 AND 11 THEN '10-12'
+            WHEN HOUR(order_time) BETWEEN 12 AND 13 THEN '12-14'
+            WHEN HOUR(order_time) BETWEEN 14 AND 15 THEN '14-16'
+            WHEN HOUR(order_time) BETWEEN 16 AND 17 THEN '16-18'
+            WHEN HOUR(order_time) BETWEEN 18 AND 19 THEN '18-20'
+            WHEN HOUR(order_time) BETWEEN 20 AND 21 THEN '20-22'
+            WHEN HOUR(order_time) BETWEEN 22 AND 23 THEN '22-24'
+        END AS timeslot,
+        COUNT(order_id) AS order_count,
+        DENSE_RANK() OVER (ORDER BY COUNT(order_id) DESC) AS rn
+    FROM orders
+    GROUP BY timeslot
+)
+SELECT * 
+FROM CT_TABLE
+WHERE rn = 1;
+```
+
     
 
 
