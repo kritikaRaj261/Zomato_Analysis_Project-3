@@ -183,6 +183,47 @@ OR order_time IS NULL
 OR order_status IS NULL
 OR total_amount IS NULL
 ```
+## 4. Data Analysis & Findings
+**Task1.Write a query to find the top 5 most frequently ordered dishes by customer called "Anita Verma" in the last 1 year.**
+````sql
+SELECT 
+    o.order_item,
+    COUNT(o.order_item) AS order_count
+FROM 
+    customer c
+INNER JOIN 
+    orders o ON c.customer_id = o.customer_id
+WHERE 
+    c.customer_name = 'Anita Verma'
+    AND o.order_date >= CURDATE() - INTERVAL 1 YEAR
+GROUP BY 
+    o.order_item
+ORDER BY 
+    order_count DESC
+LIMIT 5;
+
+
+-- Method-2
+With CT_Rank as 
+(
+SELECT 
+    o.order_item,
+    COUNT(o.order_item) AS order_count,
+    DENSE_RANK() OVER (ORDER BY COUNT(o.order_item) DESC) AS RN
+FROM 
+    customer c
+INNER JOIN 
+    orders o ON c.customer_id = o.customer_id
+WHERE 
+    c.customer_name = 'Anita Verma'
+    AND o.order_date >= CURDATE() - INTERVAL 1 YEAR
+GROUP BY 
+    o.order_item
+    )
+    select * from CT_Rank
+    where RN<=5;
+```
+    
 
 
 
