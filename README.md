@@ -68,3 +68,38 @@ delivery_time Time,
 rider_id INT -- coming from rider table
 )
 ```
+
+## Adding Constraints to Link Fact and Dimension Tables
+```sql
+-- ADD Foreign Key constraiints Order table for customer
+ALTER TABLE orders
+ADD CONSTRAINT fk_customer
+FOREIGN KEY (customer_id)
+REFERENCES customer(customer_id);
+
+-- ADD Foreign Key constraiints Order table for restaurant
+ALTER TABLE orders
+ADD CONSTRAINT fk_restaurant
+FOREIGN KEY (restaurant_id)
+REFERENCES restaurant(restaurant_id);
+
+ -- ADD Foreign Key constraiints delivery table for order
+ALTER TABLE Delivery
+ADD CONSTRAINT fk_Order
+foreign key (order_id)
+REFERENCES orders(order_id);
+
+ALTER TABLE Delivery
+ADD CONSTRAINT fk_rider
+foreign key (rider_id)
+REFERENCES Rider(rider_id);
+
+ALTER TABLE Delivery
+DROP FOREIGN KEY fk_rider;
+
+ALTER TABLE Delivery
+ADD CONSTRAINT fk_rider
+FOREIGN KEY (rider_id)
+REFERENCES Rider(rider_id);
+```
+
