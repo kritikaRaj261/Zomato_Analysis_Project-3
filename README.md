@@ -653,6 +653,7 @@ WHERE o.order_date >= CURDATE() - INTERVAL 1 YEAR
 GROUP BY r.city;
 ```
   
-
+## Conclusion
+This project highlights my ability to handle complex SQL queries and provides solutions to real-world business problems in the context of a food delivery service like Zomato. The approach taken here demonstrates a structured problem-solving methodology, data manipulation skills, and the ability to derive actionable insights from data.
 
 
