@@ -507,11 +507,11 @@ group by customer_id
 select sum(order_count) as Total_Order,sum(Revenue) as Revenue,CustomerSegment
  from CT_Customer
  group by CustomerSegment
+ ```
  
- /*
- Q.13 Rider Monthly Earnings:
-Calculate each rider’s total monthly earnings, assuming they earn 8% of the order amount.
-*/
+ **Q.13 Rider Monthly Earnings:
+Calculate each rider’s total monthly earnings, assuming they earn 8% of the order amount.**
+```sql
 select d.rider_id,
 DATE_FORMAT(o.order_date,'%m-%y') as Month,
 sum(total_amount) Total_Amount,
