@@ -1,0 +1,28 @@
+restaurant_id,restaurant_name,city,opening_hours
+2,Leopold,Cafe,‘Mumbai__8:00M- 12:00AM
+6,Masala,Library,"jumbai__ 12:00PM - 3:00 PM, 7:00PM - 11:00PM"
+11,Ingian,Accent,"jethi__12:00PM..2:30 PM, 7:00 PM - 10:30PM"
+12,KarimAds,eth,9:00AM. 12:00M
+13,Bukhara,Delhi,"12:30PM. 2:45 PM, 7:00PM - 11:45 PM"
+14,Moti,Mahal,Delhi 12:00PM. 11:30
+18,The,BigChillCate,Delhi 11:00 11:00
+19,FaraiCate,Delhi,12:00 PM- 11:45 0M
+20,Lodi-TheGarden,Restaurant,Delhi 12:00 PM- 12:00AM
+21,PerchWine&Cotfee,Bar,Delhi —_—«12:00M- 11:00PM
+22,Diggin,Delhi,11:00AM 11:00
+23,Cate,Dethi,Heights Delhi 11:00AM 12:00M
+24,Olive,Bar,"&kitchen Delhi 12:30PM. 3:30PM, 7:30PM - 12:30AM"
+25,my,Dethi,11:00AM 11:00
+26,Sagar,Ratna,Delhi __7:00M- 11:00PM
+27,PunjabiBy,Nature,Delhi 12:00PM. 12:00M
+28,"MIR ‘Bengaluru 6:30AM. 13:00 M, 12:30",PM,- 6:30PM
+29,Toit,Bengaluru,12:00PM- 11:30PM
+30,Koshy,Abs,‘Bengaluru 9:00AM 12:00PM
+31,Vidyarthi,Bhavan,"Bengaluru 6:30AM 11:30AM, 2:30PM - 6:00PM"
+32,The,Only,"Place ‘Bengaluru 12:00PM. 3:00 M, 7:00 PM - 11:00PM"
+33,Truftes,Bengaluru,11:00AM- 11:00PM
+34,Empire,Restaurant,Bengaluru 11:00AM. 1:00AM
+385,Corner,House,Bengaluru 11:00AM-11:30PM
+37,The FattyBa0,Bengaluru,12:00PM-11:00PM
+38,Windmilis,Craftworks,Bengaluru 12:00PM-11:30PM
+39,The,Oberoi,12:00PM-

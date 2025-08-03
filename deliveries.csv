@@ -1,0 +1,27 @@
+delivery_id,order_id,delivery_status,delivery_time,rider_id
+1,658,Delivered,0:11:00,1
+2,111,Delivered,11:00:15,6
+3,8481,Not Delivered,11:21:28,6
+4,4634,Delivered,9:33:59,4
+5,8699,Delivered,0:38:11,13
+6,2031,Delivered,12:09:24,4
+7,2844,Delivered,7:38:05,13
+8,4074,Delivered,22:20:42,3
+9,3060,Delivered,23:12:11,1
+10,8260,Delivered,18:15:50,12
+11,2359,Delivered,21:32:17,6
+12,4928,Delivered,12:38:25,1
+13,228,Delivered,7:48:16,9
+14,1325,Delivered,14:28:45,11
+15,6422,Delivered,23:19:38,3
+16,4938,Delivered,17:31:40,4
+17,3439,Order,12:45:12,7
+18,3939,Delivered,17:16:55,12
+19,2416,Delivered,23:44:29,6
+20,7023,Delivered,9:50:47,8
+21,5889,Delivered,23:51:28,4
+22,8831,Delivered,20:39:44,15
+23,7514,Delivered,11:38:46,6
+24,4113,Delivered,0:23:00,5
+25,1111,Delivered,20:39:09,7
+26,4992,Delivered,14:10:07,4
