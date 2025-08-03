@@ -442,7 +442,114 @@ INNER JOIN
 ORDER BY 
     rest_id;
 ```
+   
+  
+ **10 Rider Average Delivery Time
+Determine each rider's average delivery time.**
 
+```sql
+
+SELECT 
+    o.order_id,
+    d.rider_id,
+    o.order_time,
+    d.delivery_time,
+    (UNIX_TIMESTAMP(d.delivery_time) - UNIX_TIMESTAMP(o.order_time)) / 60 AS delivery_duration_mins
+FROM orders o
+JOIN delivery d ON o.order_id = d.order_id
+WHERE d.delivery_status = 'Delivered';
+
+```
+
+
+
+**Q.11 Monthly Restaurant Growth Ratio
+Calculate each restaurant’s growth ratio based on the total number of delivered orders since its joining.**
+```sql
+with Growth_ratio as
+(
+select o.restaurant_id ,o.order_date,
+-- Month(o.order_date) as Month,
+DATE_FORMAT(o.order_date, '%m-%y') AS month_year,
+count(o.order_id) as Current_Month_order ,
+LAG(count(o.order_id),1) over (partition by o.restaurant_id order by DATE_FORMAT(o.order_date, '%m-%y')) as Previous_Month_order
+from orders o
+inner join delivery d
+on o.order_id=d.order_id
+where delivery_status='Delivered'
+group by  1,2,3
+order by 3
+)
+select restaurant_id,month_year,
+Current_Month_order,Previous_Month_order,
+(Current_Month_order-Previous_Month_order)/Previous_Month_order*100 as GrowthRatio
+from Growth_ratio
+```
+
+**Q.12 Customer Segmentation
+Customer Segmentation: Segment customers into 'Gold' or 'Silver' 
+groups based on their total spending compared to the average order value (AOV).
+ If a customer’s total spending exceeds the AOV, label them as 'Gold'; 
+ otherwise, label them as 'Silver'. Write an SQL query to determine each segment's..total number of orders and total revenue** 
+```sql
+
+with CT_Customer as 
+(
+select customer_id,
+count(o.order_id) as order_count,
+sum(total_amount) as Revenue,
+CASE WHEN SUM(total_amount)> (SELECT AVG(total_amount) FROM orders) then 'Gold'
+ELSE 'Silver'
+end as 'CustomerSegment'
+from orders o
+group by customer_id
+)
+select sum(order_count) as Total_Order,sum(Revenue) as Revenue,CustomerSegment
+ from CT_Customer
+ group by CustomerSegment
+ 
+ /*
+ Q.13 Rider Monthly Earnings:
+Calculate each rider’s total monthly earnings, assuming they earn 8% of the order amount.
+*/
+select d.rider_id,
+DATE_FORMAT(o.order_date,'%m-%y') as Month,
+sum(total_amount) Total_Amount,
+Sum(total_amount)*0.08 as Rider_Earning
+ from orders o
+inner join delivery d
+on o.order_id=d.order_id
+group by 1,2
+order by 1,2,3
+```
+
+**Q.14 Rider Ratings Analysis:
+Find the number of 5-star, 4-star, and 3-star ratings each rider has.
+Riders receive this rating based on delivery time.
+If orders are delivered in less than 15 minutes of order received time, the rider gets a 5-star rating.
+If they deliver between 15 and 20 minutes, they get a 4-star rating.
+If they deliver after 20 minutes, they get a 3-star rating.**
+```sql
+SELECT  
+    rider_id,
+    Rating,
+    COUNT(*) AS Rating_Count
+FROM (
+    SELECT 
+        d.rider_id,
+        TIMESTAMPDIFF(MINUTE, o.order_time, d.delivery_time) AS delivery_duration_mins,
+        CASE 
+            WHEN TIMESTAMPDIFF(MINUTE, o.order_time, d.delivery_time) < 15 THEN '5-Star Rating'
+            WHEN TIMESTAMPDIFF(MINUTE, o.order_time, d.delivery_time) BETWEEN 15 AND 20 THEN '4-Star Rating'
+            ELSE '3-Star Rating'
+        END AS Rating
+    FROM orders o
+    INNER JOIN delivery d ON o.order_id = d.order_id
+    WHERE d.delivery_status = 'Delivered'
+) k
+GROUP BY rider_id, Rating
+ORDER BY rider_id, Rating;
+```
     
 
 
