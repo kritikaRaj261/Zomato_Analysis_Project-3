@@ -1,4 +1,4 @@
-# Zomato_Analysis_Project-3
+# Zomato_Analysis_SQL-Project-3
 
 ## SQL Project: Data Analysis for Zomato – A Food Delivery Company
 ## Overview
