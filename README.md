@@ -594,7 +594,65 @@ LAG(sum(total_amount),1) over( order by DATE_FORMAT(Order_date, '%m-%y') ) as Pr
  group by 1
 ```
 
-   
+ **Q.18 Rider Efficiency:
+ Evaluate rider efficiency by determining average delivery times and identifying those with the lowest and highest averages.**
+
+```sql
+WITH CT_table AS (
+    SELECT 
+        d.rider_id,
+        (UNIX_TIMESTAMP(d.delivery_time) - UNIX_TIMESTAMP(o.order_time)) / 60 AS delivery_duration_mins
+    FROM orders o
+    INNER JOIN delivery d ON o.order_id = d.order_id
+    WHERE d.delivery_status = 'Delivered'
+),
+Average_Time_ct AS (
+    SELECT 
+        rider_id,
+        AVG(delivery_duration_mins) AS avg_deliveryTime
+    FROM CT_table
+    GROUP BY rider_id
+)
+SELECT 
+    MIN(avg_deliveryTime) AS Min_DeliveryTime,
+    MAX(avg_deliveryTime) AS Max_DeliveryTime
+FROM Average_Time_ct;
+```
+
+**Q.19 Order Item Popularity:
+Track the popularity of specific order items over time and identify seasonal demand spikes.**
+```sql
+select 
+      order_item,
+      SeasonCategory,
+	count(order_id) as Total_orders  from 
+(
+SELECT 
+    order_item,order_id,
+    MONTH(order_date) AS Month,
+    CASE 
+        WHEN MONTH(order_date) BETWEEN 4 AND 6 THEN 'Spring'
+        WHEN MONTH(order_date) > 6 AND MONTH(order_date) < 9 THEN 'Summer'
+        ELSE 'Winter'
+    END AS SeasonCategory
+FROM orders
+)sub
+group by 1,2
+order by 1,3
+```
+
+**Q.20 Rank each city based on the total revenue fro last year 2024**
+```sql
+SELECT 
+    r.city,
+    SUM(o.total_amount) AS Revenue,
+    RANK() OVER (ORDER BY SUM(o.total_amount) DESC) AS CITY_RANK
+FROM orders o
+INNER JOIN restaurant r ON o.restaurant_id = r.restaurant_id
+WHERE o.order_date >= CURDATE() - INTERVAL 1 YEAR
+GROUP BY r.city;
+```
+  
 
 
 
